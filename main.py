@@ -4,7 +4,7 @@ import bluesky as bs
 from bluesky.network.client import Client
 
 from adapters.bluesky_adapter import BlueSkyAdapter
-
+from models.action import ProposedAction, ActionType
 
 def main():
 
@@ -26,6 +26,21 @@ def main():
     client.connect()
 
     print("Connected to BlueSky.")
+
+    def test_action():
+
+        action = ProposedAction(
+            aircraft_id="TEST1",
+            action_type=ActionType.CHANGE_HEADING,
+            value=90,
+            reason="Adapter integration test",
+        )
+
+        print(f"\nExecuting: {action}")
+
+        adapter.execute_action(action)
+
+    QTimer.singleShot(5000, test_action)
 
     # Print aircraft state once per second
     def show_state():
