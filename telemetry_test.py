@@ -4,6 +4,7 @@ import bluesky as bs
 from bluesky.core import Base
 from bluesky.network import subscriber
 from bluesky.network.client import Client
+from bluesky.stack import stack
 
 from telemetry import Telemetry
 
@@ -58,5 +59,11 @@ if __name__ == "__main__":
     client.connect()
 
     print("Connected. Waiting for BlueSky telemetry...")
+
+    def send_test_command():
+        print("Sending heading command...")
+        stack("HDG TEST1 180")
+
+    QTimer.singleShot(5000, send_test_command)
 
     app.exec()
