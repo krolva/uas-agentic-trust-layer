@@ -40,7 +40,7 @@ def main():
 
         adapter.execute_action(action)
 
-    QTimer.singleShot(5000, test_action)
+    
 
     # Print aircraft state once per second
     def show_state():
