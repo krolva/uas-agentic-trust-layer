@@ -5,6 +5,8 @@ from bluesky.core import Base
 from bluesky.network import subscriber
 from bluesky.network.client import Client
 
+from telemetry import Telemetry
+
 METERS_TO_FEET = 3.28084
 MPS_TO_KNOTS = 1.94384
 MPS_TO_FPM = 196.8504
@@ -15,21 +17,23 @@ class TelemetryReader(Base):
     def acdata(self, data):
         for i, aircraft_id in enumerate(data.id):
 
-            altitude_ft = data.alt[i] * METERS_TO_FEET
-            ground_speed_knots = data.gs[i] * MPS_TO_KNOTS
-            vertical_speed_fpm = data.vs[i] * MPS_TO_FPM
+            telemetry = Telemetry(
+                aircraft_id=aircraft_id,
+                sim_time_s=float(data.simt),
 
-            print("\n--- Aircraft State ---")
-            print(f"Aircraft: {aircraft_id}")
-            print(f"Latitude: {data.lat[i]:.6f}")
-            print(f"Longitude: {data.lon[i]:.6f}")
-            print(f"Altitude: {altitude_ft:.0f} ft")
-            print(f"Track: {data.trk[i]:.1f}°")
-            print(f"Ground Speed: {ground_speed_knots:.1f} kt")
-            print(f"Vertical Speed: {vertical_speed_fpm:.0f} ft/min")
-            print(f"Simulation Time: {data.simt:.1f} s")
-            print(f"In Conflict: {bool(data.inconf[i])}")
-            print("----------------------")
+                latitude_deg=float(data.lat[i]),
+                longitude_deg=float(data.lon[i]),
+
+                altitude_ft=float(data.alt[i]) * METERS_TO_FEET,
+                track_deg=float(data.trk[i]),
+
+                ground_speed_knots=float(data.gs[i]) * MPS_TO_KNOTS,
+                vertical_speed_fpm=float(data.vs[i]) * MPS_TO_FPM,
+
+                in_conflict=bool(data.inconf[i]),
+            )
+
+            print(telemetry)
 
 if __name__ == "__main__":
 
