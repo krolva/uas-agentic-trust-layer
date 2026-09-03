@@ -12,3 +12,6 @@ venv/
 # Environment/secrets
 .env
 .env.*
+
+# Logfire
+.logfire/
