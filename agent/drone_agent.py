@@ -31,7 +31,7 @@ You are proposing an action only. You do not directly control the aircraft.
 
 
 drone_agent = Agent(
-    "google:gemini-2.5-flash",
+    "google:gemini-3.6-flash",
     output_type=ProposedAction,
     instructions=SYSTEM_PROMPT,
     name="uas_decision_agent",
