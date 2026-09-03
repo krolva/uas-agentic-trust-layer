@@ -19,6 +19,7 @@ from agent.telemetry_formatter import format_telemetry
 
 class AgentTrigger(QObject):
     run = pyqtSignal(str)
+    shutdown = pyqtSignal()
 
 
 def main():
@@ -54,6 +55,7 @@ def main():
     agent_trigger = AgentTrigger()
 
     agent_trigger.run.connect(agent_worker.run_agent)
+    agent_trigger.shutdown.connect(agent_worker.close)
 
     agent_state = {
         "busy": False
@@ -104,13 +106,13 @@ def main():
 
     agent_timer = QTimer()
     agent_timer.timeout.connect(agent_decision)
-    agent_timer.start(5000)
+    agent_timer.start(15000)
 
     # -------------------------
     # Debug telemetry output
     # -------------------------
 
-    # Print aircraft state once per second
+    # Print aircraft state once every 5 seconds, for debugging purposes.
     def show_state():
 
         aircraft = adapter.get_all_telemetry()
@@ -126,13 +128,15 @@ def main():
 
     state_timer = QTimer()
     state_timer.timeout.connect(show_state)
-    state_timer.start(1000)
+    state_timer.start(5000)
 
     # -------------------------
     # Application
     # -------------------------
 
     exit_code = app.exec()
+
+    agent_trigger.shutdown.emit()
 
     agent_thread.quit()
     agent_thread.wait()
