@@ -3,6 +3,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from observability import configure_observability
+
+configure_observability()
+
 from agent.drone_agent import drone_agent
 
 
