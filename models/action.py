@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ActionType(str, Enum):
@@ -14,4 +14,4 @@ class ProposedAction(BaseModel):
     aircraft_id: str
     action_type: ActionType
     value: float | None = None
-    reason: str
+    reason: str = Field(min_length=1, max_length=500)
