@@ -22,7 +22,7 @@ class AgentWorker(QObject):
     def run_agent(self, prompt: str):
 
         try:
-            asyncio.set_event_loop(self.loop)
+            asyncio.set_event_loop(self._loop)
 
             result = self._loop.run_until_complete(
                 drone_agent.run(prompt)
